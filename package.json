@@ -1,0 +1,25 @@
+{
+  "name": "epayco-checkout-backend",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "predev": "node scripts/check-setup.js",
+    "dev": "yarn workspace backend dev",
+    "build": "yarn workspace backend build",
+    "start": "yarn workspace backend start",
+    "test": "yarn workspace backend test",
+    "test:coverage": "yarn workspace backend test:coverage",
+    "install:all": "yarn install",
+    "setup": "node scripts/setup.js"
+  },
+  "devDependencies": {
+    "chalk": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  }
+}
