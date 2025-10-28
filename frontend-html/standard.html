@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard Checkout - ePayco Store</title>
+    <meta name="description" content="Demostración de Standard Checkout con ePayco">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>🖥️ Standard Checkout</h1>
+            <p>Checkout tradicional con múltiples pasos y máxima flexibilidad</p>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="products">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2>🏢 Demo Standard</h2>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 3rem;">
+                    El checkout Standard proporciona la experiencia clásica de ePayco con múltiples pasos,
+                    ideal para transacciones que requieren información detallada del usuario.
+                </p>
+
+                <!-- Product Selection -->
+                <div class="product-grid" style="margin-bottom: 3rem;">
+                    <div class="product-card">
+                        <div class="product-icon">🚀</div>
+                        <h3>Plan Premium</h3>
+                        <p>Para empresas en crecimiento</p>
+                        <div class="price">$599.00</div>
+                        <button class="btn btn-primary" onclick="initializeCheckout('premium-plan', 'standard')">
+                            Comprar Standard
+                        </button>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-icon">🏢</div>
+                        <h3>Plan Enterprise</h3>
+                        <p>Solución completa para grandes empresas</p>
+                        <div class="price">$999.00</div>
+                        <button class="btn btn-primary" onclick="initializeCheckout('enterprise-plan', 'standard')">
+                            Comprar Standard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div style="background: #f8fafc; padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: #1e293b;">✨ Características Standard</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: left;">
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">📋 Completo</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Formulario completo con todos los campos</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">🔧 Flexible</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Múltiples opciones de configuración</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">🎯 Detallado</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Información completa del cliente</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">🔒 Seguro</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Máxima validación de datos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Steps -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                    <h3 style="margin-bottom: 2rem; color: #1e293b;">🚀 Proceso de Pago Standard</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Información del Cliente</h4>
+                                <p style="color: #64748b; font-size: 0.9rem;">Datos personales y de contacto</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Método de Pago</h4>
+                                <p style="color: #64748b; font-size: 0.9rem;">Selección de tarjeta o método preferido</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Confirmación</h4>
+                                <p style="color: #64748b; font-size: 0.9rem;">Revisión y confirmación del pago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Example -->
+                <div style="background: #1e293b; color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: left;">
+                    <h3 style="margin-bottom: 1rem; color: #e2e8f0;">📝 Código de Ejemplo</h3>
+                    <pre style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.4; overflow-x: auto;"><code>// Configurar Standard Checkout
+const checkout = ePayco.checkout.configure({
+  sessionId: "68f7d482fbed825e47779c06",
+  type: "standard",
+  test: true
+});
+
+// En Standard, menos eventos están disponibles
+// pero ofrece mayor flexibilidad
+
+// Abrir checkout
+checkout.open();</code></pre>
+                </div>
+
+                <!-- Test Button -->
+                <button id="test-standard" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    🧪 Probar Standard Checkout
+                </button>
+                
+                <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+                    El checkout se abrirá en una nueva ventana con el flujo completo
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="checkout-types">
+        <div class="container">
+            <h2>⚖️ Standard vs OnePage</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="type-card">
+                    <h3 style="color: #3b82f6;">🖥️ Standard</h3>
+                    <ul style="text-align: left; color: #64748b; line-height: 1.8;">
+                        <li>✅ Información completa del cliente</li>
+                        <li>✅ Múltiples métodos de pago</li>
+                        <li>✅ Proceso paso a paso</li>
+                        <li>✅ Ideal para desktop</li>
+                        <li>⚠️ Más pasos en el proceso</li>
+                    </ul>
+                </div>
+                <div class="type-card">
+                    <h3 style="color: #10b981;">📱 OnePage</h3>
+                    <ul style="text-align: left; color: #64748b; line-height: 1.8;">
+                        <li>✅ Proceso más rápido</li>
+                        <li>✅ Optimizado para móviles</li>
+                        <li>✅ Mayor conversión</li>
+                        <li>✅ Event handlers completos</li>
+                        <li>⚠️ Menos información del cliente</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <section class="products" style="background: #f8fafc;">
+        <div class="container" style="text-align: center;">
+            <h2>🔄 Probar Otros Tipos</h2>
+            <div class="btn-group">
+                <a href="onepage.html" class="btn btn-outline">OnePage Checkout</a>
+                <a href="component.html" class="btn btn-outline">Component Checkout</a>
+                <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Inicio</a>
+                <a href="onepage.html">OnePage</a>
+                <a href="component.html">Component</a>
+                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
+            </div>
+            <p>&copy; 2025 ePayco Store Demo - Standard Checkout</p>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Configuración específica para Standard
+        document.addEventListener('DOMContentLoaded', function() {
+            const testButton = document.getElementById('test-standard');
+            if (testButton) {
+                testButton.addEventListener('click', () => {
+                    initializeCheckout('premium-plan', 'standard');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

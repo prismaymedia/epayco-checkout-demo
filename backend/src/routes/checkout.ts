@@ -6,13 +6,9 @@ const router = express.Router();
 
 interface CreateSessionRequestBody {
   name: string;
-  description: string;
+  amount: number | string; // Puede venir como string del frontend
   currency: string;
-  amount: number;
-  lang?: string;
-  ip: string;
-  country?: string;
-  test?: boolean;
+  description: string;
 }
 
 interface ConfirmationRequestBody {
@@ -29,65 +25,81 @@ interface ConfirmationRequestBody {
  * POST /api/checkout/create-session
  * Crea una nueva sesión de checkout
  * 
- * Body esperado:
+ * Body esperado desde frontend:
  * {
  *   name: string,
- *   description: string,
- *   currency: string,
  *   amount: number,
- *   ip: string,
- *   country?: string (opcional),
- *   lang?: string (opcional)
+ *   currency: string,
+ *   description: string
  * }
  * 
- * Nota: El parámetro test siempre se establece en "true" desde el backend
+ * El backend añade automáticamente:
+ * - checkout_version: "2"
+ * - lang: "ES"
+ * - country: "CO"
+ * - test: "true"
+ * - ip: detectada del cliente
+ * - response y confirmation URLs
  */
 router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestBody>, res: Response, next: NextFunction) => {
   try {
     const {
       name,
-      description,
       amount,
       currency,
-      ip,
-      country
+      description
     } = req.body;
     
-    console.log('Creando sesión de checkout para:', { name, amount, currency });
+    // Convertir amount a número si es string
+    const amountNumber = typeof amount === 'string' ? parseFloat(amount) : amount;
+    
+    if (isNaN(amountNumber) || amountNumber <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'El monto debe ser un número válido mayor a 0'
+      });
+    }
     
     // 1. Obtener token de autenticación
     const authResponse = await getEpaycoToken();
     const token = authResponse.token;
     
-    // 2. Usar IP proporcionada o detectar IP del cliente
-    const clientIp = ip || req.ip || req.socket.remoteAddress || '127.0.0.1';
+    // 2. Detectar IP del cliente
+    const clientIp = req.ip || req.socket.remoteAddress || '201.245.254.45';
     
     // 3. Construir URLs dinámicas basadas en variables de entorno
     const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`;
     const responseUrl = process.env.RESPONSE_URL || 'http://localhost:3002/transaction-result.html';
     const confirmationUrl = `${backendUrl}/api/checkout/confirmation`;
     
-    // 4. Preparar datos de la sesión (test siempre en true desde backend)
+    // 4. Preparar datos de la sesión con todos los campos requeridos por ePayco
     const sessionData: SessionData = {
-      name,
-      description,
+      // Campos requeridos
+      checkout_version: "2",
+      name: name, // Usar el nombre enviado desde el frontend
+      description: description,
       currency: currency.toUpperCase(),
-      amount: amount.toString(),
-      test: "true", // Siempre en modo prueba desde el backend
+      amount: amountNumber, // Usar el amount convertido a número
+      country: "CO",
+      lang: "ES",
       ip: clientIp.replace('::ffff:', ''), // Limpiar formato IPv6
-      ...(country && { country: country.toUpperCase() }), // Agregar country solo si se proporciona
-      // URL de respuesta después del pago
+      test: true, // Booleano
       response: responseUrl,
-      // URL de confirmación (webhook)
-      confirmation: confirmationUrl
+      confirmation: confirmationUrl,
+      
+      // Configuración por defecto
+      method: "POST",
+      dues: 1,
+      noRedirectOnClose: true,
+      forceResponse: false,
+      uniqueTransactionPerBill: false,
+      autoClick: false,
+      methodsDisable: [],
+      config: {}
     };
-    
-    console.log('Datos de sesión:', sessionData);
     
     // 5. Crear sesión en ePayco (validación realizada por ePayco API)
     const session = await createCheckoutSession(token, sessionData);
-    
-    console.log('Sesión creada exitosamente:', session);
     
     // Retornar la respuesta exacta del API de ePayco
     res.json(session);
@@ -112,30 +124,6 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
 router.post('/confirmation', async (req: Request<{}, {}, ConfirmationRequestBody>, res: Response) => {
   try {
     console.log('Confirmación recibida de ePayco:', req.body);
-    
-    // Aquí puedes procesar la confirmación
-    // Actualizar base de datos, enviar emails, etc.
-    
-    const {
-      x_ref_payco,
-      x_transaction_id,
-      x_amount,
-      x_currency_code,
-      x_transaction_state,
-      x_approval_code,
-      x_response_reason_text
-    } = req.body;
-    
-    // Guardar en memoria o procesar según necesites
-    console.log('Transacción procesada:', {
-      reference: x_ref_payco,
-      transactionId: x_transaction_id,
-      amount: x_amount,
-      currency: x_currency_code,
-      state: x_transaction_state,
-      approvalCode: x_approval_code,
-      reason: x_response_reason_text
-    });
     
     // Responder a ePayco
     res.json({

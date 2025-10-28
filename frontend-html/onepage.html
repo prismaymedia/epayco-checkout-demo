@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnePage Checkout - ePayco Store</title>
+    <meta name="description" content="Demostración de OnePage Checkout con ePayco">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>📱 OnePage Checkout</h1>
+            <p>Checkout optimizado para móviles en una sola página</p>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="products">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2>🚀 Demo OnePage</h2>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 3rem;">
+                    El checkout OnePage ofrece una experiencia optimizada para dispositivos móviles,
+                    donde todo el proceso de pago se realiza en una sola pantalla.
+                </p>
+
+                <!-- Product Selection -->
+                <div class="product-grid" style="margin-bottom: 3rem;">
+                    <div class="product-card">
+                        <div class="product-icon">📦</div>
+                        <h3>Plan Básico</h3>
+                        <p>Perfecto para pequeños negocios</p>
+                        <div class="price">$299.00</div>
+                        <button class="btn btn-primary" onclick="initializeCheckout('basic-plan', 'onepage')">
+                            Comprar OnePage
+                        </button>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-icon">🚀</div>
+                        <h3>Plan Premium</h3>
+                        <p>Para empresas en crecimiento</p>
+                        <div class="price">$599.00</div>
+                        <button class="btn btn-primary" onclick="initializeCheckout('premium-plan', 'onepage')">
+                            Comprar OnePage
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div style="background: #f8fafc; padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: #1e293b;">✨ Características OnePage</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: left;">
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">📱 Mobile First</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Diseñado específicamente para dispositivos móviles</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">⚡ Rápido</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Proceso de pago en un solo paso</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">🎯 Optimizado</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Mayor tasa de conversión</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #38b2ac; margin-bottom: 0.5rem;">🔧 Eventos</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Event handlers disponibles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Example -->
+                <div style="background: #1e293b; color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: left;">
+                    <h3 style="margin-bottom: 1rem; color: #e2e8f0;">📝 Código de Ejemplo</h3>
+                    <pre style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.4; overflow-x: auto;"><code>// Configurar OnePage Checkout
+const checkout = ePayco.checkout.configure({
+  sessionId: "68f7d482fbed825e47779c06",
+  type: "onepage",
+  test: true
+});
+
+// Event handlers disponibles
+checkout.onCreated(() => {
+  console.log("Checkout creado");
+});
+
+checkout.onErrors(errors => {
+  console.error("Error:", errors);
+});
+
+checkout.onClosed(() => {
+  console.log("Checkout cerrado");
+});
+
+// Abrir checkout
+checkout.open();</code></pre>
+                </div>
+
+                <!-- Test Button -->
+                <button id="test-onepage" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    🧪 Probar OnePage Checkout
+                </button>
+                
+                <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+                    Este botón cargará dinámicamente el script de ePayco y abrirá el checkout
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <section class="checkout-types">
+        <div class="container" style="text-align: center;">
+            <h2>🔄 Probar Otros Tipos</h2>
+            <div class="btn-group">
+                <a href="standard.html" class="btn btn-outline">Standard Checkout</a>
+                <a href="component.html" class="btn btn-outline">Component Checkout</a>
+                <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Inicio</a>
+                <a href="standard.html">Standard</a>
+                <a href="component.html">Component</a>
+                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
+            </div>
+            <p>&copy; 2025 ePayco Store Demo - OnePage Checkout</p>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Configuración específica para OnePage
+        document.addEventListener('DOMContentLoaded', function() {
+            const testButton = document.getElementById('test-onepage');
+            if (testButton) {
+                testButton.addEventListener('click', () => {
+                    initializeCheckout('premium-plan', 'onepage');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

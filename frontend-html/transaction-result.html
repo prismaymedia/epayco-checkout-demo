@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de Transacción - ePayco Store</title>
+    <meta name="description" content="Resultado de la transacción de pago con ePayco">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
+    <style>
+        .result-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .success-icon {
+            background: linear-gradient(135deg, #38b2ac, #2c7a7b);
+            color: white;
+        }
+        
+        .error-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .pending-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .result-details {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .detail-value {
+            color: #64748b;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .result-container {
+                margin: 2rem auto;
+                padding: 1rem;
+            }
+            
+            .result-card {
+                padding: 2rem 1rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>🧾 Resultado de Transacción</h1>
+            <p>Resultado del procesamiento de tu pago con ePayco</p>
+        </div>
+    </section>
+
+    <!-- Result Container -->
+    <div class="result-container">
+        <div class="result-card">
+            <!-- Icon will be set by JavaScript -->
+            <div id="result-icon" class="result-icon">
+                <span>⏳</span>
+            </div>
+            
+            <!-- Title will be set by JavaScript -->
+            <h2 id="result-title">Procesando transacción...</h2>
+            
+            <!-- Message will be set by JavaScript -->
+            <p id="result-message">Por favor espera mientras procesamos tu transacción.</p>
+            
+            <!-- Transaction Details -->
+            <div id="result-details" class="result-details" style="display: none;">
+                <div class="detail-row">
+                    <span class="detail-label">Referencia:</span>
+                    <span class="detail-value" id="ref-payco">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Estado:</span>
+                    <span class="detail-value" id="transaction-state">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Código de Respuesta:</span>
+                    <span class="detail-value" id="response-code">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Descripción:</span>
+                    <span class="detail-value" id="response-description">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Método de Pago:</span>
+                    <span class="detail-value" id="payment-method">-</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Monto:</span>
+                    <span class="detail-value" id="transaction-amount">-</span>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="actions">
+                <a href="index.html" class="btn btn-primary">🏠 Volver al Inicio</a>
+                <button id="print-result" class="btn btn-secondary">🖨️ Imprimir Comprobante</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Inicio</a>
+                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
+                <a href="https://epayco.co" target="_blank">ePayco</a>
+            </div>
+            <p>&copy; 2025 ePayco Store Demo - Resultado de Transacción</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener parámetros de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Elementos del DOM
+            const resultIcon = document.getElementById('result-icon');
+            const resultTitle = document.getElementById('result-title');
+            const resultMessage = document.getElementById('result-message');
+            const resultDetails = document.getElementById('result-details');
+            const printButton = document.getElementById('print-result');
+            
+            // Función para mostrar resultado exitoso
+            function showSuccess() {
+                resultIcon.innerHTML = '<span>✅</span>';
+                resultIcon.className = 'result-icon success-icon';
+                resultTitle.textContent = '¡Pago Exitoso!';
+                resultMessage.textContent = 'Tu transacción se ha procesado correctamente.';
+                resultDetails.style.display = 'block';
+            }
+            
+            // Función para mostrar resultado de error
+            function showError() {
+                resultIcon.innerHTML = '<span>❌</span>';
+                resultIcon.className = 'result-icon error-icon';
+                resultTitle.textContent = 'Pago Rechazado';
+                resultMessage.textContent = 'Tu transacción no pudo ser procesada.';
+                resultDetails.style.display = 'block';
+            }
+            
+            // Función para mostrar resultado pendiente
+            function showPending() {
+                resultIcon.innerHTML = '<span>⏳</span>';
+                resultIcon.className = 'result-icon pending-icon';
+                resultTitle.textContent = 'Pago Pendiente';
+                resultMessage.textContent = 'Tu transacción está siendo procesada.';
+                resultDetails.style.display = 'block';
+            }
+            
+            // Función para llenar los detalles
+            function fillDetails() {
+                document.getElementById('ref-payco').textContent = urlParams.get('x_ref_payco') || '-';
+                document.getElementById('transaction-state').textContent = urlParams.get('x_transaction_state') || '-';
+                document.getElementById('response-code').textContent = urlParams.get('x_cod_response') || '-';
+                document.getElementById('response-description').textContent = urlParams.get('x_response') || '-';
+                document.getElementById('payment-method').textContent = urlParams.get('x_franchise') || '-';
+                
+                const amount = urlParams.get('x_amount');
+                const currency = urlParams.get('x_currency_code') || 'COP';
+                if (amount) {
+                    document.getElementById('transaction-amount').textContent = 
+                        new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: currency
+                        }).format(parseFloat(amount));
+                }
+            }
+            
+            // Determinar el estado de la transacción
+            const transactionState = urlParams.get('x_transaction_state');
+            const responseCode = urlParams.get('x_cod_response');
+            
+            if (transactionState === 'Aprobada' || responseCode === '1') {
+                showSuccess();
+            } else if (transactionState === 'Rechazada' || responseCode === '2') {
+                showError();
+            } else if (transactionState === 'Pendiente' || responseCode === '3') {
+                showPending();
+            } else {
+                // Si no hay parámetros, mostrar mensaje genérico
+                resultIcon.innerHTML = '<span>ℹ️</span>';
+                resultIcon.className = 'result-icon pending-icon';
+                resultTitle.textContent = 'Información de Transacción';
+                resultMessage.textContent = 'No se encontraron datos de transacción en la URL.';
+            }
+            
+            // Llenar detalles si hay parámetros
+            if (urlParams.toString()) {
+                fillDetails();
+            }
+            
+            // Event listener para imprimir
+            printButton.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Log para debugging
+            if (urlParams.toString()) {
+                console.log('Transaction Result Parameters:', Object.fromEntries(urlParams));
+            }
+        });
+    </script>
+</body>
+</html>

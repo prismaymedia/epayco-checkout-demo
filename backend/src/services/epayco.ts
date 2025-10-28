@@ -57,11 +57,38 @@ export async function createCheckoutSession(
   const sessionUrl = process.env.EPAYCO_SESSION_URL || 'https://apify.epayco.co/payment/session/create';
   
   try {
-    // Agregar checkout_version automáticamente y forzar test en true
+    // Asegurar que los campos requeridos tengan el formato correcto
     const requestData = {
-      ...sessionData,
       checkout_version: "2",
-      test: "true"
+      name: sessionData.name,
+      description: sessionData.description,
+      currency: sessionData.currency.toUpperCase(),
+      amount: sessionData.amount, // Enviar como número
+      country: sessionData.country,
+      lang: sessionData.lang,
+      ip: sessionData.ip,
+      test: true, // Siempre true en desarrollo - como booleano
+      response: sessionData.response,
+      confirmation: sessionData.confirmation,
+      
+      // Campos opcionales por defecto
+      method: sessionData.method || "POST",
+      dues: sessionData.dues || 1,
+      noRedirectOnClose: sessionData.noRedirectOnClose !== undefined ? sessionData.noRedirectOnClose : true,
+      forceResponse: sessionData.forceResponse || false,
+      uniqueTransactionPerBill: sessionData.uniqueTransactionPerBill || false,
+      autoClick: sessionData.autoClick || false,
+      methodsDisable: sessionData.methodsDisable || [],
+      config: sessionData.config || {},
+      
+      // Agregar opcionalmente si vienen en sessionData
+      ...(sessionData.taxBase && { taxBase: sessionData.taxBase }),
+      ...(sessionData.tax && { tax: sessionData.tax }),
+      ...(sessionData.taxIco !== undefined && { taxIco: sessionData.taxIco }),
+      ...(sessionData.extras && { extras: sessionData.extras }),
+      ...(sessionData.extrasEpayco && { extrasEpayco: sessionData.extrasEpayco }),
+      ...(sessionData.billing && { billing: sessionData.billing }),
+      ...(sessionData.splitPayment && { splitPayment: sessionData.splitPayment })
     };
     
     const response = await fetch(sessionUrl, {

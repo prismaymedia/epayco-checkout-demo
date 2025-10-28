@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePayco Store - Checkout Demo</title>
+    <meta name="description" content="Demostración de integración con ePayco Checkout - Diferentes tipos de checkout">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>🚀 ePayco Checkout Demo</h1>
+            <p>Experimenta diferentes tipos de integración con ePayco</p>
+            <div class="btn-group">
+                <a href="#products" class="btn btn-primary">Ver Productos</a>
+                <a href="#checkout-types" class="btn btn-checkout-types">
+                    <span>🛒 Tipos de Checkout</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>📦 Nuestros Productos</h2>
+            <div class="product-grid">
+                <!-- Los productos se renderizan dinámicamente via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Types -->
+    <section id="checkout-types" class="checkout-types">
+        <div class="container">
+            <h2>🛒 Tipos de Checkout</h2>
+            <div class="types-grid">
+                <div class="type-card">
+                    <div class="type-icon">📱</div>
+                    <h3>OnePage</h3>
+                    <p>Checkout en una sola página optimizado para móviles. Experiencia fluida y rápida para el usuario.</p>
+                    <a href="onepage.html" class="btn btn-primary">Ver Demo</a>
+                </div>
+                
+                <div class="type-card">
+                    <div class="type-icon">🖥️</div>
+                    <h3>Standard</h3>
+                    <p>Checkout tradicional con múltiples pasos. Ideal para transacciones que requieren más información.</p>
+                    <a href="standard.html" class="btn btn-primary">Ver Demo</a>
+                </div>
+                
+                <div class="type-card">
+                    <div class="type-icon">🧩</div>
+                    <h3>Component</h3>
+                    <p>Checkout embebido como componente. Máxima personalización e integración con tu diseño.</p>
+                    <a href="component.html" class="btn btn-primary">Ver Demo</a>
+                </div>
+            </div>
+
+            <!-- Quick Test Buttons -->
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3 style="margin-bottom: 1.5rem; color: #1e293b;">🧪 Pruebas Rápidas</h3>
+                <div class="btn-group">
+                    <button id="onepage-btn" class="btn btn-secondary">Test OnePage</button>
+                    <button id="standard-btn" class="btn btn-secondary">Test Standard</button>
+                    <button id="component-btn" class="btn btn-secondary">Test Component</button>
+                </div>
+                <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+                    Estos botones inician el checkout directamente con el Plan Premium
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="products" style="background: #f8fafc;">
+        <div class="container">
+            <h2>✨ Características</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-icon">🔒</div>
+                    <h3>Seguro</h3>
+                    <p>Transacciones protegidas con los más altos estándares de seguridad PCI DSS.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">⚡</div>
+                    <h3>Rápido</h3>
+                    <p>Procesamiento instantáneo de pagos con confirmación en tiempo real.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🌍</div>
+                    <h3>Global</h3>
+                    <p>Acepta pagos desde cualquier parte del mundo con múltiples métodos de pago.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" onclick="API.healthCheck().then(data => Utils.showToast('Backend OK', 'success')).catch(e => Utils.showToast('Backend Error', 'error'))">Test Backend</a>
+                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
+                <a href="https://docs.epayco.co/" target="_blank">ePayco Docs</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+            </div>
+            <p>&copy; 2025 ePayco Store Demo. Hecho con ❤️ para desarrolladores.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
+                Demo de integración - No realizar pagos reales
+            </p>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

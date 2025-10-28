@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Checkout - ePayco Store</title>
+    <meta name="description" content="Demostración de Component Checkout con ePayco">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+    <style>
+        /* Estilos específicos para el componente embebido */
+        .component-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            margin: 2rem 0;
+        }
+        
+        .component-placeholder {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+        }
+        
+        .integration-code {
+            background: #1e293b;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>🧩 Component Checkout</h1>
+            <p>Checkout embebido como componente personalizable</p>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="products">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2>🎨 Demo Component</h2>
+                    <p style="font-size: 1.1rem; color: #64748b;">
+                        El checkout Component se embebe directamente en tu página,
+                        ofreciendo máxima personalización e integración con tu diseño.
+                    </p>
+                </div>
+
+                <!-- Product Selection -->
+                <div class="product-grid" style="margin-bottom: 3rem;">
+                    <div class="product-card">
+                        <div class="product-icon">🧩</div>
+                        <h3>Component Demo</h3>
+                        <p>Prueba el checkout embebido</p>
+                        <div class="price">$599.00</div>
+                        <button class="btn btn-primary" onclick="initializeCheckout('premium-plan', 'component')">
+                            Cargar Component
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Component Container -->
+                <div class="component-container">
+                    <h3 style="margin-bottom: 1rem; color: #1e293b; text-align: center;">
+                        🖼️ Área del Component Checkout
+                    </h3>
+                    <div id="epayco-component" class="component-placeholder">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🧩</div>
+                        <h4>Component Checkout se cargará aquí</h4>
+                        <p>Haz clic en "Cargar Component" para ver el checkout embebido</p>
+                        <button class="btn btn-secondary" onclick="initializeCheckout('premium-plan', 'component')" style="margin-top: 1rem;">
+                            Cargar Ahora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div style="background: #f8fafc; padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: #1e293b; text-align: center;">✨ Características Component</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        <div style="text-align: center;">
+                            <div style="background: #38b2ac; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">🎨</div>
+                            <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Personalizable</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Adapta el diseño a tu marca</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="background: #38b2ac; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">🔧</div>
+                            <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Integrado</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Sin salir de tu página</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="background: #38b2ac; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">📱</div>
+                            <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Responsivo</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Funciona en todos los dispositivos</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="background: #38b2ac; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">🎯</div>
+                            <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Eventos</h4>
+                            <p style="color: #64748b; font-size: 0.9rem;">Control completo del flujo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Steps -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                    <h3 style="margin-bottom: 2rem; color: #1e293b; text-align: center;">🚀 Pasos de Integración</h3>
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Crear Container</h4>
+                                <div class="integration-code">&lt;div id="epayco-component"&gt;&lt;/div&gt;</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Configurar Component</h4>
+                                <div class="integration-code">const checkout = ePayco.checkout.configure({
+  sessionId: "session_id",
+  type: "component",
+  container: "#epayco-component"
+});</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: #38b2ac; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
+                            <div>
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Manejar Eventos</h4>
+                                <div class="integration-code">checkout.onCreated(() => console.log("Component listo"));
+checkout.onErrors(errors => console.error(errors));</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Code Example -->
+                <div style="background: #1e293b; color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: left;">
+                    <h3 style="margin-bottom: 1rem; color: #e2e8f0;">📝 Código Completo</h3>
+                    <pre style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.4; overflow-x: auto;"><code>&lt;!-- HTML --&gt;
+&lt;div id="epayco-component"&gt;&lt;/div&gt;
+
+&lt;script src="https://checkout-green.epayco.co/checkout.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+// Configurar Component Checkout
+const checkout = ePayco.checkout.configure({
+  sessionId: "68f7d482fbed825e47779c06",
+  type: "component",
+  test: true,
+  container: "#epayco-component"
+});
+
+// Event handlers (disponibles en component)
+checkout.onCreated(() => {
+  console.log("Component checkout creado");
+});
+
+checkout.onErrors(errors => {
+  console.error("Error en component:", errors);
+});
+
+checkout.onClosed(() => {
+  console.log("Component checkout cerrado");
+});
+
+// El component se carga automáticamente
+// No necesita .open()
+&lt;/script&gt;</code></pre>
+                </div>
+
+                <!-- Test Button -->
+                <div style="text-align: center;">
+                    <button id="test-component" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                        🧪 Probar Component Checkout
+                    </button>
+                    
+                    <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+                        El component se cargará en el contenedor de arriba
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="checkout-types">
+        <div class="container">
+            <h2>🔍 Comparación de Tipos</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                    <thead style="background: #38b2ac; color: white;">
+                        <tr>
+                            <th style="padding: 1rem; text-align: left;">Característica</th>
+                            <th style="padding: 1rem; text-align: center;">OnePage</th>
+                            <th style="padding: 1rem; text-align: center;">Standard</th>
+                            <th style="padding: 1rem; text-align: center;">Component</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 1rem; font-weight: 600;">Integración</td>
+                            <td style="padding: 1rem; text-align: center;">Popup</td>
+                            <td style="padding: 1rem; text-align: center;">Nueva Ventana</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981; font-weight: 600;">Embebido</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 1rem; font-weight: 600;">Personalización</td>
+                            <td style="padding: 1rem; text-align: center;">Media</td>
+                            <td style="padding: 1rem; text-align: center;">Baja</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981; font-weight: 600;">Alta</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 1rem; font-weight: 600;">Eventos</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981;">✅</td>
+                            <td style="padding: 1rem; text-align: center; color: #ef4444;">❌</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981; font-weight: 600;">✅</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; font-weight: 600;">Móviles</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981; font-weight: 600;">Excelente</td>
+                            <td style="padding: 1rem; text-align: center;">Bueno</td>
+                            <td style="padding: 1rem; text-align: center; color: #10b981;">Excelente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <section class="products" style="background: #f8fafc;">
+        <div class="container" style="text-align: center;">
+            <h2>🔄 Probar Otros Tipos</h2>
+            <div class="btn-group">
+                <a href="onepage.html" class="btn btn-outline">OnePage Checkout</a>
+                <a href="standard.html" class="btn btn-outline">Standard Checkout</a>
+                <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Inicio</a>
+                <a href="onepage.html">OnePage</a>
+                <a href="standard.html">Standard</a>
+                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
+            </div>
+            <p>&copy; 2025 ePayco Store Demo - Component Checkout</p>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Configuración específica para Component
+        document.addEventListener('DOMContentLoaded', function() {
+            const testButton = document.getElementById('test-component');
+            if (testButton) {
+                testButton.addEventListener('click', () => {
+                    initializeCheckout('premium-plan', 'component');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
