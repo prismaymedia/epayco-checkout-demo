@@ -142,10 +142,11 @@ body {
 }
 
 .price {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #2c7a7b;
-  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #38b2ac;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
 }
 
 /* Buttons */

@@ -51,10 +51,22 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
       description
     } = req.body;
     
+    // 📝 LOG: Lo que se recibe del frontend
+    console.log('\n📥 === REQUEST RECIBIDO EN /api/checkout/create-session ===');
+    console.log('Datos crudos del body:', JSON.stringify(req.body, null, 2));
+    console.log('Tipos de datos:');
+    console.log(`  - name: ${name} (${typeof name})`);
+    console.log(`  - amount: ${amount} (${typeof amount})`);
+    console.log(`  - currency: ${currency} (${typeof currency})`);
+    console.log(`  - description: ${description} (${typeof description})`);
+    
     // Convertir amount a número si es string
     const amountNumber = typeof amount === 'string' ? parseFloat(amount) : amount;
     
+    console.log(`✓ Amount convertido: ${amountNumber} (${typeof amountNumber})`);
+    
     if (isNaN(amountNumber) || amountNumber <= 0) {
+      console.log('❌ ERROR: Amount inválido');
       return res.status(400).json({
         success: false,
         error: 'El monto debe ser un número válido mayor a 0'
@@ -64,6 +76,7 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
     // 1. Obtener token de autenticación
     const authResponse = await getEpaycoToken();
     const token = authResponse.token;
+    console.log('✓ Token obtenido de ePayco');
     
     // 2. Detectar IP del cliente
     const clientIp = req.ip || req.socket.remoteAddress || '201.245.254.45';
@@ -73,6 +86,10 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
     
     // 4. URL de confirmación (usa localtunnel si está disponible, sino localhost)
     const confirmationUrl = getConfirmationUrl();
+    
+    console.log(`📍 IP detectada: ${clientIp.replace('::ffff:', '')}`);
+    console.log(`📍 URL de respuesta: ${responseUrl}`);
+    console.log(`📍 URL de confirmación: ${confirmationUrl}`);
     
     // 5. Preparar datos de la sesión con todos los campos requeridos por ePayco
     const sessionData: SessionData = {
@@ -100,8 +117,16 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
       config: {}
     };
     
+    // 📤 LOG: Datos que se envían a ePayco
+    console.log('\n📤 === SESSION DATA ENVIADO A EPAYCO ===');
+    console.log(JSON.stringify(sessionData, null, 2));
+    
     // 6. Crear sesión en ePayco (validación realizada por ePayco API)
     const session = await createCheckoutSession(token, sessionData);
+    
+    console.log('\n✅ === RESPUESTA DE EPAYCO ===');
+    console.log(JSON.stringify(session, null, 2));
+    console.log('='.repeat(50) + '\n');
     
     // Retornar la respuesta exacta del API de ePayco
     res.json(session);

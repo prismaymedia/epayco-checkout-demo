@@ -197,7 +197,7 @@ const ProductManager = {
       id: 'basic-plan',
       name: 'Plan Básico',
       description: 'Perfecto para pequeños negocios',
-      amount: 29900, // $299.00 COP
+      amount: 49900, // $49.900 COP
       currency: 'COP',
       icon: '📦'
     },
@@ -205,17 +205,9 @@ const ProductManager = {
       id: 'premium-plan',
       name: 'Plan Premium',
       description: 'Para empresas en crecimiento',
-      amount: 59900, // $599.00 COP  
-      currency: 'COP',
+      amount: 99, // $99.00 USD
+      currency: 'USD',
       icon: '🚀'
-    },
-    {
-      id: 'enterprise-plan',
-      name: 'Plan Enterprise',
-      description: 'Solución completa para grandes empresas',
-      amount: 99900, // $999.00 COP
-      currency: 'COP',
-      icon: '🏢'
     }
   ],
 
@@ -224,16 +216,18 @@ const ProductManager = {
   },
 
   formatPrice(amount, currency = 'COP') {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0
-    }).format(amount / 100);
+    // Solo mostrar el número sin símbolo de moneda, ya que lo agregamos después
+    const formatter = new Intl.NumberFormat('es-CO', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+    return formatter.format(amount);
   }
 };
 
 // Funciones principales de checkout
-async function initializeCheckout(productId, checkoutType = 'onepage') {
+async function initializeCheckout(productId) {
   try {
     Utils.showLoading();
     
@@ -253,7 +247,7 @@ async function initializeCheckout(productId, checkoutType = 'onepage') {
     // Cargar script de ePayco si no está cargado
     await EPaycoManager.loadScript();
 
-    // Crear sesión en el backend
+    // Crear sesión en el backend enviando name, description y currency
     const session = await API.createSession(product);
     
     if (!session.success || !session.data?.sessionId) {
@@ -262,35 +256,14 @@ async function initializeCheckout(productId, checkoutType = 'onepage') {
 
     Utils.log('Session created successfully', session);
 
-    // Configurar checkout de ePayco
-    EPaycoManager.configure(session.data.sessionId, checkoutType);
+    // Configurar checkout de ePayco - Siempre onepage
+    EPaycoManager.configure(session.data.sessionId, 'onepage');
     
     Utils.hideLoading();
+    Utils.showToast('¡Listo para el checkout!', 'success');
     
-    // Para component, mostrar mensaje diferente
-    if (checkoutType === 'component') {
-      Utils.showToast('¡Component checkout cargado!', 'success');
-      
-      // Actualizar el placeholder del component
-      const componentContainer = document.getElementById('epayco-component');
-      if (componentContainer) {
-        // El component se carga automáticamente en el container
-        setTimeout(() => {
-          if (componentContainer.children.length === 0) {
-            componentContainer.innerHTML = `
-              <div style="text-align: center; padding: 2rem; color: #64748b;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
-                <p>Cargando component checkout...</p>
-              </div>
-            `;
-          }
-        }, 1000);
-      }
-    } else {
-      Utils.showToast('¡Listo para el checkout!', 'success');
-      // Abrir checkout inmediatamente para onepage y standard
-      setTimeout(() => EPaycoManager.open(), 500);
-    }
+    // Abrir checkout inmediatamente
+    setTimeout(() => EPaycoManager.open(), 500);
 
   } catch (error) {
     Utils.hideLoading();
@@ -317,25 +290,28 @@ function renderProducts() {
   const productGrid = document.querySelector('.product-grid');
   if (!productGrid) return;
 
-  productGrid.innerHTML = ProductManager.products.map(product => `
+  productGrid.innerHTML = ProductManager.products.map(product => {
+    const symbol = product.currency === 'COP' ? '$' : '$';
+    return `
     <div class="product-card">
       <div class="product-icon">${product.icon}</div>
       <h3>${product.name}</h3>
       <p>${product.description}</p>
-      <div class="price">${ProductManager.formatPrice(product.amount, product.currency)}</div>
-      <button class="btn btn-primary" onclick="initializeCheckout('${product.id}', 'onepage')">
+      <div class="price">${symbol} ${ProductManager.formatPrice(product.amount, product.currency)} ${product.currency}</div>
+      <button class="btn btn-primary" onclick="initializeCheckout('${product.id}')">
         Comprar Ahora
       </button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function setupCheckoutButtons() {
   // Botones para diferentes tipos de checkout
   const checkoutButtons = {
-    'onepage-btn': () => initializeCheckout('premium-plan', 'onepage'),
-    'standard-btn': () => initializeCheckout('premium-plan', 'standard'),
-    'component-btn': () => initializeCheckout('premium-plan', 'component')
+    'onepage-btn': () => initializeCheckout('basic-plan'),
+    'standard-btn': () => initializeCheckout('premium-plan'),
+    'component-btn': () => initializeCheckout('basic-plan')
   };
 
   Object.entries(checkoutButtons).forEach(([id, handler]) => {
