@@ -1,4 +1,4 @@
-# 🎨 Frontend HTML - ePayco Checkout Demo
+# 🎨 Frontend HTML - Smart Checkout Demo
 
 Una demostración completa de los tres tipos de checkout de ePayco implementados con HTML, CSS y JavaScript vanilla.
 

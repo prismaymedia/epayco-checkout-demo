@@ -195,7 +195,7 @@ const ProductManager = {
   products: [
     {
       id: 'basic-plan',
-      name: 'Plan Básico',
+      name: 'Smart Checkout ePayco',
       description: 'Perfecto para pequeños negocios',
       amount: 49900, // $49.900 COP
       currency: 'COP',
@@ -203,7 +203,7 @@ const ProductManager = {
     },
     {
       id: 'premium-plan',
-      name: 'Plan Premium',
+      name: 'Smart Checkout ePayco',
       description: 'Para empresas en crecimiento',
       amount: 99, // $99.00 USD
       currency: 'USD',
@@ -291,13 +291,12 @@ function renderProducts() {
   if (!productGrid) return;
 
   productGrid.innerHTML = ProductManager.products.map(product => {
-    const symbol = product.currency === 'COP' ? '$' : '$';
     return `
     <div class="product-card">
       <div class="product-icon">${product.icon}</div>
       <h3>${product.name}</h3>
       <p>${product.description}</p>
-      <div class="price">${symbol} ${ProductManager.formatPrice(product.amount, product.currency)} ${product.currency}</div>
+      <div class="price">$ ${ProductManager.formatPrice(product.amount, product.currency)} ${product.currency}</div>
       <button class="btn btn-primary" onclick="initializeCheckout('${product.id}')">
         Comprar Ahora
       </button>
