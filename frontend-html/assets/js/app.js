@@ -227,7 +227,7 @@ const ProductManager = {
 };
 
 // Funciones principales de checkout
-async function initializeCheckout(productId) {
+async function initializeCheckout(productId, checkoutType = 'onepage') {
   try {
     Utils.showLoading();
     
@@ -256,8 +256,8 @@ async function initializeCheckout(productId) {
 
     Utils.log('Session created successfully', session);
 
-    // Configurar checkout de ePayco - Siempre onepage
-    EPaycoManager.configure(session.data.sessionId, 'onepage');
+    // Configurar checkout de ePayco con el tipo especificado
+    EPaycoManager.configure(session.data.sessionId, checkoutType);
     
     Utils.hideLoading();
     Utils.showToast('¡Listo para el checkout!', 'success');
@@ -275,6 +275,13 @@ async function initializeCheckout(productId) {
 // Inicialización de la página
 document.addEventListener('DOMContentLoaded', function() {
   Utils.log('Frontend initialized');
+
+  // Actualizar año dinámico en el footer
+  const footerYear = document.getElementById('footer-year');
+  if (footerYear) {
+    const currentYear = new Date().getFullYear();
+    footerYear.textContent = `© ${currentYear} Smart Checkout Demo. Hecho con ❤️ para desarrolladores.`;
+  }
 
   // Renderizar productos en la página principal
   renderProducts();
@@ -330,6 +337,33 @@ async function checkBackendStatus() {
     Utils.showToast('Advertencia: Backend no disponible', 'error');
   }
 }
+
+// Hamburger Menu Toggle
+function setupHamburgerMenu() {
+  const hamburger = document.getElementById('hamburger-menu');
+  const navMenu = document.getElementById('nav-menu');
+  
+  if (!hamburger || !navMenu) return;
+  
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  
+  // Cerrar menú cuando se hace clic en un link
+  const navLinks = navMenu.querySelectorAll('a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('active');
+    });
+  });
+}
+
+// Llamar setup del menú después de que cargue el DOM
+document.addEventListener('DOMContentLoaded', function() {
+  setupHamburgerMenu();
+});
 
 // Exportar funciones globales
 window.EPaycoFrontend = {

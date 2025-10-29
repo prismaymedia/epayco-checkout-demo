@@ -6,19 +6,54 @@
     <title>ePayco Store - Checkout Demo</title>
     <meta name="description" content="Demostración de integración con ePayco Checkout - Diferentes tipos de checkout">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
 </head>
 <body>
+    <!-- Header Sticky -->
+    <header class="header sticky">
+        <div class="nav">
+            <a href="#" class="logo">💳 Smart Checkout</a>
+            
+            <!-- Hamburger Menu -->
+            <button class="hamburger" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Navigation Links -->
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#products">Productos</a></li>
+                    <li><a href="#checkout-types">Tipos de Checkout</a></li>
+                    <li><a href="http://localhost:3001/health" target="_blank">Test Backend</a></li>
+                    <li><a href="http://localhost:3001/api/docs" target="_blank">API Docs</a></li>
+                    <li><a href="https://www.epayco.co/docs" target="_blank">ePayco Docs</a></li>
+                    <li><a href="https://github.com/prismaymedia/epayco-checkout-demo" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     <!-- Hero -->
     <section class="hero">
-        <div class="container">
-            <h1>🚀 Smart Checkout Demo</h1>
-            <p>Experimenta diferentes tipos de integración con ePayco</p>
-            <div class="btn-group">
-                <a href="#products" class="btn btn-primary">Ver Productos</a>
-                <a href="#checkout-types" class="btn btn-checkout-types">
-                    <span>🛒 Tipos de Checkout</span>
-                </a>
+        <div class="hero-container">
+            <div class="hero-left">
+                <div class="hero-logo">ePay<span style="color: #38b2ac;">co</span> Smart Checkout</div>
+                <h1>¡Acepta pagos<br>en línea!</h1>
+                <p class="hero-subtitle">La solución completa de pagos para tu negocio</p>
+            </div>
+            <div class="hero-right">
+                <div class="hero-card">
+                    <h2>MÁS MEDIOS DE PAGO, MÁS OPCIONES DE VENDER</h2>
+                    <p>Elige la comodidad y la variedad. Regístrate con nosotros y accede a más de 22 opciones de transacciones, desde tarjetas de crédito hasta billeteras digitales.</p>
+                    <p class="highlight">Registrate ahora y simplifica tus pagos con Smart Checkout.</p>
+                    <div class="btn-group" style="justify-content: flex-start;">
+                        <a href="#products" class="btn btn-primary">Ver Productos</a>
+                        <a href="#checkout-types" class="btn btn-secondary">Tipos de Checkout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -41,15 +76,15 @@
                 <div class="type-card">
                     <div class="type-icon">📱</div>
                     <h3>OnePage</h3>
-                    <p>Checkout en una sola página optimizado para móviles. Experiencia fluida y rápida para el usuario.</p>
-                    <a href="onepage.html" class="btn btn-primary">Ver Demo</a>
+                    <p>Integra el checkout directamente en tu sitio web manteniendo a los usuarios en tu dominio</p>
+                    <button onclick="initializeCheckout('basic-plan')" class="btn btn-primary">Ver Demo</button>
                 </div>
                 
                 <div class="type-card">
                     <div class="type-icon">🖥️</div>
                     <h3>Standard</h3>
-                    <p>Checkout tradicional con múltiples pasos. Ideal para transacciones que requieren más información.</p>
-                    <a href="standard.html" class="btn btn-primary">Ver Demo</a>
+                    <p>Redirige a los usuarios a nuestra plataforma segura y optimizada para completar el pago</p>
+                    <button onclick="initializeCheckout('premium-plan', 'standard')" class="btn btn-primary">Ver Demo</button>
                 </div>
                 
                 <div class="type-card">
@@ -59,43 +94,48 @@
                     <a href="component.html" class="btn btn-primary">Ver Demo</a>
                 </div>
             </div>
-
-            <!-- Quick Test Buttons -->
-            <div style="margin-top: 3rem; text-align: center;">
-                <h3 style="margin-bottom: 1.5rem; color: #1e293b;">🧪 Pruebas Rápidas</h3>
-                <div class="btn-group">
-                    <button id="onepage-btn" class="btn btn-secondary">Test OnePage</button>
-                    <button id="standard-btn" class="btn btn-secondary">Test Standard</button>
-                    <button id="component-btn" class="btn btn-secondary">Test Component</button>
-                </div>
-                <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
-                    Estos botones inician el checkout directamente con el Plan Premium
-                </p>
-            </div>
         </div>
     </section>
 
-    <!-- Features -->
+    <!-- Products -->
     <section class="products" style="background: #f8fafc;">
         <div class="container">
             <h2>✨ Características</h2>
             <div class="product-grid">
                 <div class="product-card">
                     <div class="product-icon">🔒</div>
-                    <h3>Seguro</h3>
-                    <p>Transacciones protegidas con los más altos estándares de seguridad PCI DSS.</p>
+                    <h3>Seguridad Certificada</h3>
+                    <p>Transacciones protegidas con los más altos estándares de seguridad PCI DSS Nivel 1. Tus datos sensibles nunca tocan tu servidor.</p>
                 </div>
                 
                 <div class="product-card">
                     <div class="product-icon">⚡</div>
-                    <h3>Rápido</h3>
-                    <p>Procesamiento instantáneo de pagos con confirmación en tiempo real.</p>
+                    <h3>Procesamiento Instantáneo</h3>
+                    <p>Confirmación de pagos en tiempo real con webhook de transacción. Procesa órdenes automáticamente y de forma segura.</p>
                 </div>
                 
                 <div class="product-card">
                     <div class="product-icon">🌍</div>
-                    <h3>Global</h3>
-                    <p>Acepta pagos desde cualquier parte del mundo con múltiples métodos de pago.</p>
+                    <h3>Alcance Global</h3>
+                    <p>Soporta más de 22 métodos de pago. Acepta pagos desde cualquier parte del mundo en múltiples monedas.</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-icon">🎨</div>
+                    <h3>Personalización Completa</h3>
+                    <p>Adapta el diseño según tu marca. Integra tu logo y mantén una experiencia uniforme para tus clientes.</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-icon">📱</div>
+                    <h3>Multi-Dispositivo</h3>
+                    <p>Experiencia optimizada para web y móvil. Interfaces responsivas diseñadas para convertir en cualquier dispositivo.</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-icon">🔧</div>
+                    <h3>Fácil Integración</h3>
+                    <p>API sencilla y documentada. Implementa en minutos sin complicaciones técnicas. Soporte para múltiples opciones de checkout.</p>
                 </div>
             </div>
         </div>
@@ -104,13 +144,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-links">
-                <a href="#" onclick="API.healthCheck().then(data => Utils.showToast('Backend OK', 'success')).catch(e => Utils.showToast('Backend Error', 'error'))">Test Backend</a>
-                <a href="http://localhost:3001/api/docs" target="_blank">API Docs</a>
-                <a href="https://docs.epayco.co/" target="_blank">ePayco Docs</a>
-                <a href="https://github.com" target="_blank">GitHub</a>
-            </div>
-            <p>&copy; 2025 ePayco Store Demo. Hecho con ❤️ para desarrolladores.</p>
+            <p id="footer-year">&copy; 2025 Smart Checkout Demo. Hecho con ❤️ para desarrolladores.</p>
             <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
                 Demo de integración - No realizar pagos reales
             </p>
