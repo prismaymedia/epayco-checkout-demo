@@ -10,7 +10,7 @@
     "predev": "node scripts/check-setup.js",
     "dev": "yarn workspace backend dev",
     "build": "yarn workspace backend build",
-    "start": "concurrently \"yarn workspace backend dev\" \"yarn workspace frontend-html serve\"",
+    "start": "concurrently \"yarn workspace backend dev\" \"cd frontend-html && npx serve -s . -l 3002\"",
     "test": "yarn workspace backend test",
     "test:coverage": "yarn workspace backend test:coverage",
     "install:all": "yarn install",
