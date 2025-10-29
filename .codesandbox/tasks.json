@@ -3,47 +3,45 @@
   "setupTasks": [
     {
       "name": "Installing Dependencies",
-      "command": "npm install"
+      "command": "yarn install"
     }
   ],
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "predev": {
-      "name": "predev",
-      "command": "npm run predev"
-    },
     "dev": {
-      "name": "dev",
-      "command": "npm run start",
+      "name": "Start Development Server",
+      "command": "yarn start",
       "runAtStart": true,
+      "preview": {
+        "port": 3002
+      }
+    },
+    "backend": {
+      "name": "Backend Dev Server",
+      "command": "yarn workspace backend dev",
+      "preview": {
+        "port": 3001
+      }
+    },
+    "frontend": {
+      "name": "Frontend Dev Server",
+      "command": "yarn workspace frontend-html serve",
       "preview": {
         "port": 3002
       }
     },
     "build": {
       "name": "build",
-      "command": "npm run build"
-    },
-    "start": {
-      "name": "start",
-      "command": "npm run start"
+      "command": "yarn workspace backend build"
     },
     "test": {
       "name": "test",
-      "command": "npm run test"
-    },
-    "test:coverage": {
-      "name": "test:coverage",
-      "command": "npm run test:coverage"
-    },
-    "install:all": {
-      "name": "install:all",
-      "command": "npm run install:all"
+      "command": "yarn workspace backend test"
     },
     "setup": {
       "name": "setup",
-      "command": "npm run setup"
+      "command": "node scripts/setup.js"
     }
   }
 }
