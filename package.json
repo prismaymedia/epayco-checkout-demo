@@ -1,22 +1,24 @@
 {
-  "name": "epayco-checkout-backend",
+  "name": "epayco-checkout-monorepo",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "backend"
+    "backend",
+    "frontend-html"
   ],
   "scripts": {
     "predev": "node scripts/check-setup.js",
     "dev": "yarn workspace backend dev",
     "build": "yarn workspace backend build",
-    "start": "yarn workspace backend start",
+    "start": "concurrently \"yarn workspace backend dev\" \"yarn workspace frontend-html serve\"",
     "test": "yarn workspace backend test",
     "test:coverage": "yarn workspace backend test:coverage",
     "install:all": "yarn install",
     "setup": "node scripts/setup.js"
   },
   "devDependencies": {
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "concurrently": "^8.2.0"
   },
   "engines": {
     "node": ">=18.0.0",

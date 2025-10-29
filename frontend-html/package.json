@@ -4,13 +4,11 @@
   "description": "Frontend HTML para integración con ePayco Checkout",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve -s . -l 3002",
-    "dev": "npx serve -s . -l 3002",
-    "dev:python": "python3 -m http.server 3002 --bind 127.0.0.1",
-    "dev:php": "php -S localhost:3002",
-    "serve": "npx serve -s . -l 3002",
+    "start": "npx serve -s . -l 3000",
+    "dev": "npx serve -s . -l 3000",
+    "serve": "npx serve -s . -l 3000",
     "install": "echo 'No dependencies to install for static HTML project'",
-    "test": "echo 'Manual testing via browser - open http://localhost:3002' && exit 0"
+    "test": "echo 'Manual testing via browser - open http://localhost:3000' && exit 0"
   },
   "keywords": [
     "epayco",
