@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.js';
 import checkoutRoutes from './routes/checkout.js';
 import transactionRoutes from './routes/transaction.js';
 import { openApiSpec } from './openapi.js';
+import { getWebhookStats, getLocaltunnelUrl } from './services/webhook.js';
+import { startLocaltunnel } from './services/tunnel.js';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.get('/health', (_req: Request, res: Response) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
+    tunnelUrl: getLocaltunnelUrl(),
+    webhookStats: getWebhookStats(),
     env: {
       publicKeyConfigured: !!process.env.EPAYCO_PUBLIC_KEY && !process.env.EPAYCO_PUBLIC_KEY.includes('your_'),
       privateKeyConfigured: !!process.env.EPAYCO_PRIVATE_KEY && !process.env.EPAYCO_PRIVATE_KEY.includes('your_'),
@@ -73,29 +77,52 @@ app.use((_req: Request, res: Response) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log('\n========================================');
-  console.log('🚀 Backend ePayco Checkout');
-  console.log('========================================');
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('\nEndpoints disponibles:');
-  console.log(`  - GET  /health`);
-  console.log(`  - GET  /api/docs                      📚 API Documentation`);
-  console.log(`  - POST /api/auth/login`);
-  console.log(`  - POST /api/checkout/create-session`);
-  console.log(`  - GET  /api/transaction/:reference`);
-  console.log('========================================\n');
+app.listen(PORT, async () => {
+  console.log('\n════════════════════════════════════════════════════');
+  console.log('🚀 BACKEND EPAYCO CHECKOUT');
+  console.log('════════════════════════════════════════════════════');
+  console.log(`📍 Servidor local: http://localhost:${PORT}`);
+  console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log('\n📚 ENDPOINTS DISPONIBLES:');
+  console.log(`  • GET  /health                       ✅ Estado del servidor`);
+  console.log(`  • GET  /api/docs                     � Documentación API`);
+  console.log(`  • GET  /api/webhooks                 📊 Ver webhooks recibidos`);
+  console.log(`  • POST /api/auth/login`);
+  console.log(`  • POST /api/checkout/create-session`);
+  console.log(`  • POST /api/checkout/confirmation    🎉 Recibe pagos de ePayco`);
+  console.log(`  • GET  /api/transaction/:reference`);
+  console.log('════════════════════════════════════════════════════\n');
   
-  // Verificar configuración
+  // Inicializar localtunnel para exponer a internet
+  try {
+    await startLocaltunnel(PORT);
+  } catch (error) {
+    console.warn('\n⚠️  NO SE PUDO INICIAR LOCALTUNNEL');
+    console.warn('═══════════════════════════════════════════════════');
+    console.warn('Usando URL local: http://localhost:' + PORT);
+    console.warn('\nPara exponer a internet, instala localtunnel:');
+    console.warn('  npm install -g localtunnel');
+    console.warn('  O ejecuta en otra terminal:');
+    console.warn('  npx localtunnel --port ' + PORT);
+    console.warn('═══════════════════════════════════════════════════\n');
+  }
+  
+  // Verificar configuración de ePayco
+  const missingConfig = [];
   if (!process.env.EPAYCO_PUBLIC_KEY || process.env.EPAYCO_PUBLIC_KEY.includes('your_')) {
-    console.warn('⚠️  ADVERTENCIA: EPAYCO_PUBLIC_KEY no configurada en .env');
+    missingConfig.push('EPAYCO_PUBLIC_KEY');
   }
   if (!process.env.EPAYCO_PRIVATE_KEY || process.env.EPAYCO_PRIVATE_KEY.includes('your_')) {
-    console.warn('⚠️  ADVERTENCIA: EPAYCO_PRIVATE_KEY no configurada en .env');
+    missingConfig.push('EPAYCO_PRIVATE_KEY');
   }
-  if (!process.env.RESPONSE_URL) {
-    console.warn('⚠️  ADVERTENCIA: RESPONSE_URL no configurada en .env');
+  
+  if (missingConfig.length > 0) {
+    console.warn('⚠️  VARIABLES DE ENTORNO NO CONFIGURADAS');
+    console.warn('═══════════════════════════════════════════════════');
+    missingConfig.forEach(key => {
+      console.warn(`  • ${key}`);
+    });
+    console.warn('═══════════════════════════════════════════════════\n');
   }
 });
 

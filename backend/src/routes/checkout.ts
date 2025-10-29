@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { getEpaycoToken, createCheckoutSession } from '../services/epayco.js';
+import { addWebhookEvent, getAllWebhooks, getConfirmationUrl } from '../services/webhook.js';
 import type { SessionData } from '../types.js';
 
 const router = express.Router();
@@ -68,11 +69,12 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
     const clientIp = req.ip || req.socket.remoteAddress || '201.245.254.45';
     
     // 3. Construir URLs dinámicas basadas en variables de entorno
-    const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`;
     const responseUrl = process.env.RESPONSE_URL || 'http://localhost:3002/transaction-result.html';
-    const confirmationUrl = `${backendUrl}/api/checkout/confirmation`;
     
-    // 4. Preparar datos de la sesión con todos los campos requeridos por ePayco
+    // 4. URL de confirmación (usa localtunnel si está disponible, sino localhost)
+    const confirmationUrl = getConfirmationUrl();
+    
+    // 5. Preparar datos de la sesión con todos los campos requeridos por ePayco
     const sessionData: SessionData = {
       // Campos requeridos
       checkout_version: "2",
@@ -98,7 +100,7 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
       config: {}
     };
     
-    // 5. Crear sesión en ePayco (validación realizada por ePayco API)
+    // 6. Crear sesión en ePayco (validación realizada por ePayco API)
     const session = await createCheckoutSession(token, sessionData);
     
     // Retornar la respuesta exacta del API de ePayco
@@ -123,12 +125,17 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
  */
 router.post('/confirmation', async (req: Request<{}, {}, ConfirmationRequestBody>, res: Response) => {
   try {
-    console.log('Confirmación recibida de ePayco:', req.body);
+    console.log('\n📨 POST /api/checkout/confirmation');
+    console.log('IP del cliente:', req.ip);
+    console.log('Headers:', JSON.stringify(req.headers, null, 2));
     
-    // Responder a ePayco
+    // Guardar el webhook recibido
+    addWebhookEvent(req.body, req.headers as Record<string, any>, 'POST');
+    
+    // Responder a ePayco (debe ser rápido)
     res.json({
       success: true,
-      message: 'Confirmación recibida'
+      message: 'Confirmación recibida y procesada'
     });
   } catch (error) {
     console.error('Error en confirmación:', error);
@@ -137,6 +144,20 @@ router.post('/confirmation', async (req: Request<{}, {}, ConfirmationRequestBody
       error: (error as Error).message
     });
   }
+});
+
+/**
+ * GET /api/checkout/webhooks
+ * Ver todos los webhooks recibidos
+ */
+router.get('/webhooks', (_req: Request, res: Response) => {
+  const webhooks = getAllWebhooks();
+  console.log(`\n📊 GET /api/checkout/webhooks - Total: ${webhooks.length}`);
+  res.json({
+    success: true,
+    total: webhooks.length,
+    webhooks: webhooks
+  });
 });
 
 export default router;
