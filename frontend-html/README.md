@@ -2,6 +2,22 @@
 
 Una demostración completa de los tres tipos de checkout de ePayco implementados con HTML, CSS y JavaScript vanilla.
 
+## 🌐 Despliegue
+
+### Desarrollo Local
+```bash
+npm run dev
+```
+Disponible en `http://localhost:3002`
+
+### Producción en Vercel
+Lee la guía completa: **[DEPLOY.md](./DEPLOY.md)**
+
+Quick start:
+```bash
+npm run deploy
+```
+
 ## 📋 Descripción
 
 Este proyecto demuestra la integración de los tres tipos de checkout de ePayco:

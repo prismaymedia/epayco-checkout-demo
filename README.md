@@ -1,8 +1,47 @@
-# ePayco Checkout Backend
+# 🚀 ePayco Checkout - Demo Completo
 
-Backend API para integración con ePayco Smart Checkout. Proporciona endpoints para autenticación, creación de sesiones de checkout, procesamiento de confirmaciones y consulta de transacciones.
+Proyecto completo de demostración de integración con ePayco Smart Checkout, incluyendo backend API y frontend HTML con los tres tipos de checkout.
 
-## 🚀 Inicio Rápido
+## 📁 Estructura del Proyecto
+
+```
+examples/
+├── backend/              # API REST con Express + TypeScript
+│   ├── src/             # Código fuente
+│   ├── api/             # Entry point Vercel
+│   ├── DEPLOY.md        # Guía de despliegue en Vercel
+│   └── README.md        # Documentación del backend
+│
+├── frontend-html/       # Frontend HTML estático
+│   ├── assets/          # CSS, JS y recursos
+│   ├── *.html           # Páginas de checkout
+│   ├── DEPLOY.md        # Guía de despliegue en Vercel
+│   └── README.md        # Documentación del frontend
+│
+└── README.md           # Este archivo
+```
+
+## 🎯 Características
+
+### Backend
+- ✅ API REST con Express + TypeScript
+- ✅ Autenticación con ePayco
+- ✅ Creación de sesiones de checkout
+- ✅ Webhook de confirmación de pagos
+- ✅ Consulta de transacciones
+- ✅ Documentación interactiva (Scalar)
+- ✅ Tests con Jest
+- ✅ Listo para Vercel
+
+### Frontend
+- ✅ HTML + CSS + JavaScript vanilla
+- ✅ Tres tipos de checkout (OnePage, Standard, Component)
+- ✅ Diseño responsive
+- ✅ Integración completa con backend
+- ✅ Página de resultados de transacción
+- ✅ Listo para Vercel
+
+## 🚀 Inicio Rápido (Desarrollo Local)
 
 ### 1. Configuración Inicial
 
@@ -26,49 +65,136 @@ RESPONSE_URL=http://localhost:3002/transaction-result.html
 PORT=3001
 ```
 
-### 3. Ejecutar el Servidor
+### 3. Ejecutar Backend y Frontend
 
 ```bash
-# Modo desarrollo (con hot reload)
-yarn dev
+# Terminal 1 - Backend
+cd backend
+npm run dev
+# Backend disponible en http://localhost:3001
 
-# Modo producción
-yarn build
-yarn start
+# Terminal 2 - Frontend
+cd frontend-html
+npm run dev
+# Frontend disponible en http://localhost:3002
 ```
+
+## 🌐 Despliegue en Vercel
+
+### Backend
+
+```bash
+cd backend
+npm run verify-vercel    # Verificar configuración
+npm run deploy           # Desplegar a Vercel
+```
+
+📖 **Guía completa**: [backend/DEPLOY.md](./backend/DEPLOY.md)
+
+### Frontend
+
+```bash
+# 1. Primero despliega el backend y copia la URL
+
+# 2. Actualiza frontend-html/assets/js/config.js con la URL del backend
+
+# 3. Despliega el frontend
+cd frontend-html
+npm run verify          # Verificar configuración
+npm run deploy          # Desplegar a Vercel
+```
+
+📖 **Guía completa**: [frontend-html/DEPLOY.md](./frontend-html/DEPLOY.md)
 
 ## 📖 Documentación
 
+### Desarrollo Local
 - **API Docs**: http://localhost:3001/api/docs
 - **Health Check**: http://localhost:3001/health
+- **Frontend**: http://localhost:3002
+
+### Producción
+- **Backend API**: https://tu-backend.vercel.app/api/docs
+- **Frontend**: https://tu-frontend.vercel.app
 
 ## 🛠️ Scripts Disponibles
 
+### Workspace (raíz)
 ```bash
-yarn dev             # Inicia servidor en modo desarrollo
-yarn build           # Compila el proyecto TypeScript
-yarn start           # Inicia servidor en modo producción
-yarn test            # Ejecuta las pruebas
-yarn test:coverage   # Ejecuta pruebas con cobertura
-yarn setup           # Configuración inicial del proyecto
+yarn install         # Instalar todas las dependencias
+yarn setup          # Configuración inicial
+yarn dev            # Iniciar backend en desarrollo
+yarn build          # Compilar backend
+yarn test           # Ejecutar tests
 ```
 
-## 📁 Estructura del Proyecto
+### Backend
+```bash
+cd backend
+npm run dev              # Desarrollo con hot reload
+npm run build            # Compilar TypeScript
+npm run start            # Producción
+npm run test             # Tests
+npm run verify-vercel    # Verificar config Vercel
+npm run deploy           # Desplegar a Vercel
+```
+
+### Frontend
+```bash
+cd frontend-html
+npm run dev              # Servidor local
+npm run verify           # Verificar config
+npm run deploy           # Desplegar a Vercel
+```
+
+## 📁 Estructura Detallada
 
 ```
 examples/
-├── backend/                 # API Backend
+├── backend/                    # API Backend con Express
+│   ├── api/
+│   │   └── index.ts           # Entry point Vercel
 │   ├── src/
-│   │   ├── routes/         # Rutas de la API
-│   │   ├── services/       # Servicios (ePayco integration)
-│   │   ├── types.ts        # Tipos TypeScript
-│   │   ├── openapi.ts      # Documentación OpenAPI
-│   │   └── index.ts        # Servidor principal
-│   ├── tests/              # Pruebas automatizadas
-│   ├── coverage/           # Reportes de cobertura
-│   └── dist/               # Código compilado
-├── scripts/                # Scripts de utilidad
-└── package.json            # Configuración del workspace
+│   │   ├── routes/            # Rutas de la API
+│   │   │   ├── auth.ts        # Autenticación ePayco
+│   │   │   ├── checkout.ts    # Crear sesión, webhooks
+│   │   │   └── transaction.ts # Consultar transacciones
+│   │   ├── services/          # Lógica de negocio
+│   │   │   ├── epayco.ts      # Integración ePayco
+│   │   │   ├── webhook.ts     # Manejo de webhooks
+│   │   │   └── tunnel.ts      # Localtunnel para dev
+│   │   ├── types.ts           # Tipos TypeScript
+│   │   ├── openapi.ts         # Documentación OpenAPI
+│   │   └── index.ts           # Servidor Express
+│   ├── tests/                 # Tests con Jest
+│   ├── scripts/
+│   │   └── verify-vercel.cjs  # Verificación pre-deploy
+│   ├── vercel.json            # Config Vercel
+│   ├── DEPLOY.md              # Guía de despliegue
+│   └── README.md              # Documentación
+│
+├── frontend-html/              # Frontend estático
+│   ├── assets/
+│   │   ├── css/
+│   │   │   └── styles.css     # Estilos globales
+│   │   └── js/
+│   │       ├── config.js      # Config dinámica URLs
+│   │       └── app.js         # Lógica de checkout
+│   ├── index.html             # Página principal
+│   ├── onepage.html           # Checkout One Page
+│   ├── component.html         # Checkout Component
+│   ├── standard.html          # Checkout Standard
+│   ├── transaction-result.html # Resultados de pago
+│   ├── scripts/
+│   │   └── verify-deployment.cjs # Verificación
+│   ├── vercel.json            # Config Vercel
+│   ├── DEPLOY.md              # Guía de despliegue
+│   └── README.md              # Documentación
+│
+├── scripts/                    # Scripts de utilidad
+│   ├── check-setup.js         # Verificar setup
+│   └── setup.js               # Configuración inicial
+└── package.json               # Workspace config
 ```
 
 ## 🧪 Pruebas

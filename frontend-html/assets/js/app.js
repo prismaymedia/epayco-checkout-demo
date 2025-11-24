@@ -1,5 +1,6 @@
-// Configuración global
-const CONFIG = {
+// Configuración global - Se importa desde config.js
+// Si config.js no está cargado, usar valores por defecto
+const CONFIG = window.CONFIG || {
   API_BASE_URL: 'http://localhost:3001',
   EPAYCO_SCRIPT_URL: 'https://checkout.epayco.co/checkout-green-v2.js',
   DEBUG: true
