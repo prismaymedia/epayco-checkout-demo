@@ -142,21 +142,16 @@ export const openApiSpec = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['name', 'amount', 'currency', 'country'],
+                required: ['name', 'amount', 'currency'],
                 properties: {
                   name: {
                     type: 'string',
                     description: 'Nombre del producto',
                     example: 'Producto de Prueba'
                   },
-                  description: {
-                    type: 'string',
-                    description: 'Descripción del producto',
-                    example: 'Descripción del producto de prueba'
-                  },
                   amount: {
                     type: 'number',
-                    description: 'Monto a cobrar en centavos (para COP)',
+                    description: 'Monto a cobrar',
                     example: 10000,
                     minimum: 1
                   },
@@ -165,18 +160,6 @@ export const openApiSpec = {
                     description: 'Código de moneda (ISO 4217)',
                     example: 'COP',
                     enum: ['COP', 'USD']
-                  },
-                  country: {
-                    type: 'string',
-                    description: 'Código de país (ISO 3166-1 alpha-2) - REQUERIDO por ePayco',
-                    example: 'CO',
-                    pattern: '^[A-Z]{2}$'
-                  },
-                  ip: {
-                    type: 'string',
-                    description: 'IP del cliente. Si no se proporciona, se detecta automáticamente. Debe ser una IP válida.',
-                    example: '190.85.30.100',
-                    pattern: '^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$'
                   }
                 }
               }
