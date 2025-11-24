@@ -11,12 +11,19 @@ build/
 *.js
 *.js.map
 
+# Excepción: Permitir scripts .cjs
+!scripts/*.cjs
+
 # Variables de entorno
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Vercel
+.vercel
+.vercel.json
 
 # Logs
 logs/

@@ -10,7 +10,10 @@
     "type-check": "tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "vercel-build": "tsc",
+    "deploy": "vercel --prod",
+    "verify-vercel": "node scripts/verify-vercel.cjs"
   },
   "dependencies": {
     "@scalar/express-api-reference": "^0.8.22",

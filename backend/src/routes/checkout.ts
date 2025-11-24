@@ -91,30 +91,14 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
     console.log(`📍 URL de respuesta: ${responseUrl}`);
     console.log(`📍 URL de confirmación: ${confirmationUrl}`);
     
-    // 5. Preparar datos de la sesión con todos los campos requeridos por ePayco
+    // 5. Preparar datos de la sesión con solo los campos necesarios
     const sessionData: SessionData = {
-      // Campos requeridos
       checkout_version: "2",
-      name: name, // Usar el nombre enviado desde el frontend
-      description: description,
+      name: name,
+      amount: amountNumber,
       currency: currency.toUpperCase(),
-      amount: amountNumber, // Usar el amount convertido a número
-      country: "CO",
-      lang: "ES",
-      ip: clientIp.replace('::ffff:', ''), // Limpiar formato IPv6
-      test: true, // Booleano
       response: responseUrl,
-      confirmation: confirmationUrl,
-      
-      // Configuración por defecto
-      method: "POST",
-      dues: 1,
-      noRedirectOnClose: true,
-      forceResponse: false,
-      uniqueTransactionPerBill: false,
-      autoClick: false,
-      methodsDisable: [],
-      config: {}
+      confirmation: confirmationUrl
     };
     
     // 📤 LOG: Datos que se envían a ePayco
@@ -128,8 +112,21 @@ router.post('/create-session', async (req: Request<{}, {}, CreateSessionRequestB
     console.log(JSON.stringify(session, null, 2));
     console.log('='.repeat(50) + '\n');
     
-    // Retornar la respuesta exacta del API de ePayco
-    res.json(session);
+    // Agregar documentación útil a la respuesta
+    const responseWithDocs = {
+      ...session,
+      docs: {
+        implementation: "https://docs.epayco.com/docs/checkout-implementacion",
+        additionalFields: "https://docs.epayco.com/docs/checkout-implementacion#campos-adicionales",
+        apiReference: "https://api.epayco.co/#50550c23-522b-48bc-a8b4-b8aac33fe16f",
+        testCards: "https://docs.epayco.com/docs/medios-de-pruebas-1",
+        responsePage: "https://docs.epayco.com/docs/checkout-respuesta-y-confirmacion#p%C3%A1gina-de-respuesta-response",
+        webhooks: "https://docs.epayco.com/docs/checkout-respuesta-y-confirmacion#url-de-confirmaci%C3%B3n-confirmation-webhook"
+      }
+    };
+    
+    // Retornar la respuesta con documentación
+    res.json(responseWithDocs);
   } catch (error: any) {
     console.error('Error al crear sesión:', error);
     

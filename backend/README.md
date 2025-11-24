@@ -2,6 +2,22 @@
 
 API backend para integración con ePayco Smart Checkout. Permite autenticación, creación de sesiones de checkout, procesamiento de confirmaciones y consulta de transacciones.
 
+## 🌐 Despliegue
+
+### Desarrollo Local
+```bash
+npm run dev
+```
+Servidor disponible en `http://localhost:3001`
+
+### Producción en Vercel
+Lee la guía completa de despliegue: **[DEPLOY.md](./DEPLOY.md)**
+
+Quick start:
+```bash
+npm run deploy
+```
+
 ## 🚀 Endpoints Disponibles
 
 ### Health Check
@@ -183,6 +199,36 @@ npm run test:coverage
 # Ejecutar pruebas en modo watch
 npm run test:watch
 ```
+
+## 🚢 Despliegue en Vercel
+
+### Verificación Pre-Despliegue
+```bash
+npm run verify-vercel
+```
+
+### Despliegue
+```bash
+# Opción 1: CLI
+npm run deploy
+
+# Opción 2: Dashboard
+# Conecta tu repositorio en vercel.com/new
+```
+
+### Archivos Importantes para Vercel
+- `vercel.json` - Configuración de build y rutas
+- `api/index.ts` - Entry point para Vercel
+- `.vercelignore` - Archivos a ignorar en el build
+
+📖 **Guía completa**: Lee [DEPLOY.md](./DEPLOY.md) para instrucciones detalladas.
+
+## 📚 Enlaces Útiles
+
+- [Documentación ePayco](https://docs.epayco.com/docs/checkout-implementacion)
+- [Medios de Prueba](https://docs.epayco.com/docs/medios-de-pruebas-1)
+- [API Reference](https://api.epayco.co/)
+- [Vercel Docs](https://vercel.com/docs)
 
 **Cobertura actual**: ~49% statements, ~44% branches, 12 tests pasando ✅
 

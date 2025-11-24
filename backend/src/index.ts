@@ -77,53 +77,58 @@ app.use((_req: Request, res: Response) => {
   });
 });
 
-app.listen(PORT, async () => {
-  console.log('\n════════════════════════════════════════════════════');
-  console.log('🚀 BACKEND EPAYCO CHECKOUT');
-  console.log('════════════════════════════════════════════════════');
-  console.log(`📍 Servidor local: http://localhost:${PORT}`);
-  console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  console.log('\n📚 ENDPOINTS DISPONIBLES:');
-  console.log(`  • GET  /health                       ✅ Estado del servidor`);
-  console.log(`  • GET  /api/docs                     � Documentación API`);
-  console.log(`  • GET  /api/webhooks                 📊 Ver webhooks recibidos`);
-  console.log(`  • POST /api/auth/login`);
-  console.log(`  • POST /api/checkout/create-session`);
-  console.log(`  • POST /api/checkout/confirmation    🎉 Recibe pagos de ePayco`);
-  console.log(`  • GET  /api/transaction/:reference`);
-  console.log('════════════════════════════════════════════════════\n');
+// Solo iniciar servidor si no está en Vercel
+if (process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || 3001;
   
-  // Inicializar localtunnel para exponer a internet
-  try {
-    await startLocaltunnel(PORT);
-  } catch (error) {
-    console.warn('\n⚠️  NO SE PUDO INICIAR LOCALTUNNEL');
-    console.warn('═══════════════════════════════════════════════════');
-    console.warn('Usando URL local: http://localhost:' + PORT);
-    console.warn('\nPara exponer a internet, instala localtunnel:');
-    console.warn('  npm install -g localtunnel');
-    console.warn('  O ejecuta en otra terminal:');
-    console.warn('  npx localtunnel --port ' + PORT);
-    console.warn('═══════════════════════════════════════════════════\n');
-  }
-  
-  // Verificar configuración de ePayco
-  const missingConfig = [];
-  if (!process.env.EPAYCO_PUBLIC_KEY || process.env.EPAYCO_PUBLIC_KEY.includes('your_')) {
-    missingConfig.push('EPAYCO_PUBLIC_KEY');
-  }
-  if (!process.env.EPAYCO_PRIVATE_KEY || process.env.EPAYCO_PRIVATE_KEY.includes('your_')) {
-    missingConfig.push('EPAYCO_PRIVATE_KEY');
-  }
-  
-  if (missingConfig.length > 0) {
-    console.warn('⚠️  VARIABLES DE ENTORNO NO CONFIGURADAS');
-    console.warn('═══════════════════════════════════════════════════');
-    missingConfig.forEach(key => {
-      console.warn(`  • ${key}`);
-    });
-    console.warn('═══════════════════════════════════════════════════\n');
-  }
-});
+  app.listen(PORT, async () => {
+    console.log('\n════════════════════════════════════════════════════');
+    console.log('🚀 BACKEND EPAYCO CHECKOUT');
+    console.log('════════════════════════════════════════════════════');
+    console.log(`📍 Servidor local: http://localhost:${PORT}`);
+    console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+    console.log('\n📚 ENDPOINTS DISPONIBLES:');
+    console.log(`  • GET  /health                       ✅ Estado del servidor`);
+    console.log(`  • GET  /api/docs                     📖 Documentación API`);
+    console.log(`  • GET  /api/webhooks                 📊 Ver webhooks recibidos`);
+    console.log(`  • POST /api/auth/login`);
+    console.log(`  • POST /api/checkout/create-session`);
+    console.log(`  • POST /api/checkout/confirmation    🎉 Recibe pagos de ePayco`);
+    console.log(`  • GET  /api/transaction/:reference`);
+    console.log('════════════════════════════════════════════════════\n');
+    
+    // Inicializar localtunnel para exponer a internet
+    try {
+      await startLocaltunnel(PORT);
+    } catch (error) {
+      console.warn('\n⚠️  NO SE PUDO INICIAR LOCALTUNNEL');
+      console.warn('═══════════════════════════════════════════════════');
+      console.warn('Usando URL local: http://localhost:' + PORT);
+      console.warn('\nPara exponer a internet, instala localtunnel:');
+      console.warn('  npm install -g localtunnel');
+      console.warn('  O ejecuta en otra terminal:');
+      console.warn('  npx localtunnel --port ' + PORT);
+      console.warn('═══════════════════════════════════════════════════\n');
+    }
+    
+    // Verificar configuración de ePayco
+    const missingConfig = [];
+    if (!process.env.EPAYCO_PUBLIC_KEY || process.env.EPAYCO_PUBLIC_KEY.includes('your_')) {
+      missingConfig.push('EPAYCO_PUBLIC_KEY');
+    }
+    if (!process.env.EPAYCO_PRIVATE_KEY || process.env.EPAYCO_PRIVATE_KEY.includes('your_')) {
+      missingConfig.push('EPAYCO_PRIVATE_KEY');
+    }
+    
+    if (missingConfig.length > 0) {
+      console.warn('⚠️  VARIABLES DE ENTORNO NO CONFIGURADAS');
+      console.warn('═══════════════════════════════════════════════════');
+      missingConfig.forEach(key => {
+        console.warn(`  • ${key}`);
+      });
+      console.warn('═══════════════════════════════════════════════════\n');
+    }
+  });
+}
 
 export default app;
